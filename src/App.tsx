@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import React, { useState } from 'react';
+import LoginContainer from './containers/LoginContainer';
 
-function App() {
+const App = () => {
+  const [usuarioActual, setUsuarioActual] = useState(String);
+
+  const handleSuccessfulLogin = (usuario: string) => {
+    setUsuarioActual(usuario);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {usuarioActual ? (
+        <div>
+          {/* Mostrar la pantalla de administración */}
+        </div>
+      ) : (
+        <LoginContainer handleSuccessfulLogin={handleSuccessfulLogin} />
+      )}
     </div>
   );
-}
+};
 
 export default App;
