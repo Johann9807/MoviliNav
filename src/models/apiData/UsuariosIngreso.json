@@ -1,0 +1,7 @@
+{
+  "LoginUsuariosAutenticacion": [
+    { "IdLogin": 1, "NombreUsuario": "Johann.Casallas", "Contrasena": "Demo123*" },
+    { "IdLogin": 2, "NombreUsuario": "Usuario", "Contrasena": "Demo123*" },
+    { "IdLogin": 3, "NombreUsuario": "Administrador", "Contrasena": "Demo123*" }
+  ]
+}
