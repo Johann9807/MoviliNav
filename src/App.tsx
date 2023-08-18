@@ -1,23 +1,18 @@
-// App.js
 import React, { useState } from 'react';
-import LoginContainer from './containers/LoginContainer';
+import LoginCV from './modules/AdministracionLogin/controllerView/LoginCV';
+import Swal from 'sweetalert2';
+
 
 const App = () => {
-  const [usuarioActual, setUsuarioActual] = useState(String);
+  const [usuarioAutenticado, setUsuarioAutenticado] = useState<string | null>(null);
 
-  const handleSuccessfulLogin = (usuario: string) => {
-    setUsuarioActual(usuario);
+  const handleLogin = (usuario: string) => {
+    setUsuarioAutenticado(usuario);
   };
 
   return (
     <div>
-      {usuarioActual ? (
-        <div>
-          {/* Mostrar la pantalla de administración */}
-        </div>
-      ) : (
-        <LoginContainer handleSuccessfulLogin={handleSuccessfulLogin} />
-      )}
+      {!usuarioAutenticado && <LoginCV handleLogin={handleLogin} />}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MoviliNavLogo from '../../../assets/images/MoviliNav_Log_Usuario.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,6 +12,7 @@ interface LoginViewProps {
   mostrarContrasena: boolean;
   handleTogglePasswordVisibility: () => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const LoginView: React.FC<LoginViewProps> = ({
@@ -19,7 +20,8 @@ const LoginView: React.FC<LoginViewProps> = ({
   setLoginUsuarios,
   mostrarContrasena,
   handleTogglePasswordVisibility,
-  handleSubmit
+  handleSubmit,
+  handleInputChange
 }: LoginViewProps) => {
 
   return (
@@ -42,8 +44,13 @@ const LoginView: React.FC<LoginViewProps> = ({
                 type="text"
                 className="form-control custom-input"
                 id="nombreUsuario"
+                name="NombreUsuario"
                 value={loginUsuarios.NombreUsuario}
-                onChange={(e) => setLoginUsuarios({ ...loginUsuarios, NombreUsuario: e.target.value })}
+                onChange={(e) => {
+                  console.log('NombreUsuario:', e.target.value);
+                  handleInputChange(e);
+                  setLoginUsuarios({ ...loginUsuarios, NombreUsuario: e.target.value });
+                }}
               />
               <span className="input-group-text">
                 <FontAwesomeIcon icon={faUser} />
@@ -59,8 +66,13 @@ const LoginView: React.FC<LoginViewProps> = ({
                 type={mostrarContrasena ? 'text' : 'password'}
                 className="form-control"
                 id="contrasena"
+                name="Contrasena"
                 value={loginUsuarios.Contrasena}
-                onChange={(e) => setLoginUsuarios({ ...loginUsuarios, Contrasena: e.target.value })}
+                onChange={(e) => {
+                  console.log('Contrasena:', e.target.value);
+                  handleInputChange(e);
+                  setLoginUsuarios({ ...loginUsuarios, Contrasena: e.target.value });
+                }}
               />
               <button
                 type="button"
@@ -83,7 +95,6 @@ const LoginView: React.FC<LoginViewProps> = ({
         </form>
       </div>
     </div>
-
   );
 };
 

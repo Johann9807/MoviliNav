@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import LoginView from '../view/LoginView';
 import ILogin from '../../../models/Business/Login/Entities/ILogin';
 import LoginCM from '../controllerModel/LoginCM';
+import LoginView from '../view/LoginView';
+import Swal from 'sweetalert2';
 
-const LoginCV = ({ handleLogin }: any) => {
+interface LoginCVProps {
+  handleLogin: (nombreUsuario: string, contrasena: string) => void;
+}
+
+const LoginCV: React.FC<LoginCVProps> = ({ handleLogin }) => {
   const [loginUsuarios, setLoginUsuarios] = useState<ILogin>({
     IdLogin: 0,
     NombreUsuario: '',
@@ -15,23 +20,34 @@ const LoginCV = ({ handleLogin }: any) => {
     setMostrarContrasena(!mostrarContrasena);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    handleLogin(loginUsuarios);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginUsuarios((prevLogin) => ({
+      ...prevLogin,
+      [name]: value,
+    }));
   };
 
-  const LoginUsuariosAutenticacion = async () => {
-    // Crear una instancia de LoginCM
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     const loginCMInstance = new LoginCM();
+    const usuariosEncontrados = await loginCMInstance.verificarUsuariosExisten(
+      loginUsuarios.NombreUsuario,
+      loginUsuarios.Contrasena
+    );
 
-    // Llamar al método verificarUsuariosExisten y manejar los resultados
-    const usuariosAVerificar = [loginUsuarios]; // Puedes ajustar esto según tus necesidades
-    const resultados = await loginCMInstance.verificarUsuariosExisten(usuariosAVerificar);
-
-    console.log('Resultados de verificación de usuarios:', resultados);
-    
-    // Establecer el estado loginUsuarios con los resultados obtenidos
-    setLoginUsuarios(resultados[0] || { IdLogin: 0, NombreUsuario: '', Contrasena: '' });
+    if (usuariosEncontrados.length > 0) {
+      const usuarioValido = usuariosEncontrados[0];
+      handleLogin(usuarioValido.NombreUsuario, usuarioValido.Contrasena);
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Verifique la información',
+        text: 'Los usuarios no fueron encontrados en la base de datos',
+        confirmButtonText: 'Aceptar',
+      });
+    }
   };
 
   return (
@@ -40,6 +56,7 @@ const LoginCV = ({ handleLogin }: any) => {
       setLoginUsuarios={setLoginUsuarios}
       mostrarContrasena={mostrarContrasena}
       handleTogglePasswordVisibility={handleTogglePasswordVisibility}
+      handleInputChange={handleInputChange}
       handleSubmit={handleSubmit}
     />
   );

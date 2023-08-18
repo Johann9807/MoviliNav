@@ -1,19 +1,7 @@
 {
-  "posts": [
-    {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    }
-  ],
-  "comments": [
-    {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
-    }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+  "LoginUsuariosAutenticacion": [
+    { "IdLogin": 1, "NombreUsuario": "Johann.Casallas", "Contrasena": "Demo123*" },
+    { "IdLogin": 2, "NombreUsuario": "Usuario", "Contrasena": "Demo123*" },
+    { "IdLogin": 3, "NombreUsuario": "Administrador", "Contrasena": "Demo123*" }
+  ]
 }
