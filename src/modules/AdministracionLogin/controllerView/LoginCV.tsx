@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import ILogin from '../../../models/Business/Login/Entities/ILogin';
 import LoginCM from '../controllerModel/LoginCM';
 import LoginView from '../view/LoginView';
-import Swal from 'sweetalert2';
+import Notification from '../../../services/NotificationService';
 
 interface LoginCVProps {
   handleLogin: (nombreUsuario: string, contrasena: string) => void;
 }
+const loginCMInstance = new LoginCM();
 
 const LoginCV: React.FC<LoginCVProps> = ({ handleLogin }) => {
   const [loginUsuarios, setLoginUsuarios] = useState<ILogin>({
@@ -31,21 +32,23 @@ const LoginCV: React.FC<LoginCVProps> = ({ handleLogin }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const loginCMInstance = new LoginCM();
+
     const usuariosEncontrados = await loginCMInstance.verificarUsuariosExisten(
       loginUsuarios.NombreUsuario,
       loginUsuarios.Contrasena
     );
 
     if (usuariosEncontrados.length > 0) {
+      Notification.success({
+        title: '¡Bienvenido!',
+        message: 'Tu viaje es más que un simple trayecto',
+      });
       const usuarioValido = usuariosEncontrados[0];
       handleLogin(usuarioValido.NombreUsuario, usuarioValido.Contrasena);
     } else {
-      Swal.fire({
-        icon: 'error',
+      Notification.error({
         title: 'Verifique la información',
-        text: 'Los usuarios no fueron encontrados en la base de datos',
-        confirmButtonText: 'Aceptar',
+        message: 'El usuario no fue encontrado',
       });
     }
   };
