@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import MoviliNavLogo from '../assets/images/MoviliNav_Log_Usuario.png';
+import MoviliNavLogo from '../../../assets/images/MoviliNav_Log_Usuario.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faUser } from '@fortawesome/free-solid-svg-icons';
-import './Login.css';
+import '../../../modules/AdministracionLogin/view/LoginView.css';
+import ILogin from '../../../models/Business/Login/Entities/ILogin';
 
-const Login = ({ handleLogin }: any) => {
-  const [nombreUsuario, setNombreUsuario] = useState('');
-  const [contrasena, setContrasena] = useState('');
-  const [mostrarContrasena, setMostrarContrasena] = useState(false);
+interface LoginViewProps {
+  loginUsuarios: ILogin;
+  setLoginUsuarios: React.Dispatch<React.SetStateAction<ILogin>>;
+  mostrarContrasena: boolean;
+  handleTogglePasswordVisibility: () => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
-  const handleTogglePasswordVisibility = () => {
-    setMostrarContrasena(!mostrarContrasena);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    handleLogin(nombreUsuario, contrasena);
-  };
+const LoginView: React.FC<LoginViewProps> = ({
+  loginUsuarios,
+  setLoginUsuarios,
+  mostrarContrasena,
+  handleTogglePasswordVisibility,
+  handleSubmit,
+  handleInputChange
+}: LoginViewProps) => {
 
   return (
     <div className="container-fluid vh-100 d-flex align-items-center justify-content-center login-container">
@@ -39,8 +44,13 @@ const Login = ({ handleLogin }: any) => {
                 type="text"
                 className="form-control custom-input"
                 id="nombreUsuario"
-                value={nombreUsuario}
-                onChange={(e) => setNombreUsuario(e.target.value)}
+                name="NombreUsuario"
+                value={loginUsuarios.NombreUsuario}
+                onChange={(e) => {
+                  console.log('NombreUsuario:', e.target.value);
+                  handleInputChange(e);
+                  setLoginUsuarios({ ...loginUsuarios, NombreUsuario: e.target.value });
+                }}
               />
               <span className="input-group-text">
                 <FontAwesomeIcon icon={faUser} />
@@ -56,8 +66,13 @@ const Login = ({ handleLogin }: any) => {
                 type={mostrarContrasena ? 'text' : 'password'}
                 className="form-control"
                 id="contrasena"
-                value={contrasena}
-                onChange={(e) => setContrasena(e.target.value)}
+                name="Contrasena"
+                value={loginUsuarios.Contrasena}
+                onChange={(e) => {
+                  console.log('Contrasena:', e.target.value);
+                  handleInputChange(e);
+                  setLoginUsuarios({ ...loginUsuarios, Contrasena: e.target.value });
+                }}
               />
               <button
                 type="button"
@@ -80,8 +95,7 @@ const Login = ({ handleLogin }: any) => {
         </form>
       </div>
     </div>
-
   );
 };
 
-export default Login;
+export default LoginView;
